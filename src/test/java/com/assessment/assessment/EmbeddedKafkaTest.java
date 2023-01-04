@@ -36,7 +36,7 @@ public class EmbeddedKafkaTest {
     @Test
     public void successSendAndReceive() throws Exception {
         String event = "10000001|2022-11-05T09:25:00|10.25|2000000001|110.25";
-        assessmentProducer.send(event);
+        assessmentProducer.send(new String[]{event});
 
         boolean messageConsumed = assessmentConsumer.getLatch().await(10, TimeUnit.SECONDS);
         assertTrue(messageConsumed);
@@ -52,7 +52,7 @@ public class EmbeddedKafkaTest {
     public void invalidEvent_producerWillNotSend_throwsIncorrectFormatException() throws Exception {
         String event = "10000001TEST|2022-11-05T09:25:00|10.25|2000000001|110.25";
 
-        assertThrows(IncorrectFormatException.class, () -> assessmentProducer.send(event));
+        assertThrows(IncorrectFormatException.class, () -> assessmentProducer.send(new String[]{event}));
     }
 
 }

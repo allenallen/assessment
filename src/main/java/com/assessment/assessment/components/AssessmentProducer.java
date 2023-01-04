@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.logging.Logger;
 
 @Component
@@ -17,9 +18,11 @@ public class AssessmentProducer {
     @Autowired
     private KafkaTemplate<String, String> template;
 
-    public void send(String event) {
-        LOGGER.info(String.format("Sending event to topic %s - %s", TOPIC, event));
-        Helper.verifyEvent(event);
-        template.send(TOPIC, event);
+    public void send(String[] events) {
+        LOGGER.info(String.format("Sending event(s) to topic %s - %s", TOPIC, Arrays.toString(events)));
+        for (String event : events) {
+            Helper.verifyEvent(event);
+            template.send(TOPIC, event);
+        }
     }
 }
